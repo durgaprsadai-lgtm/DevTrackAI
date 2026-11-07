@@ -1,0 +1,40 @@
+﻿@model DevTrackAI.Models.Learning
+
+@{
+    ViewData["Title"] = "Edit Course";
+}
+
+<h2>Edit Course</h2>
+
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input asp-for="Id" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="CourseName" class="form-label"></label>
+        <input asp-for="CourseName" class="form-control" />
+        <span asp-validation-for="CourseName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Platform" class="form-label"></label>
+        <input asp-for="Platform" class="form-control" />
+        <span asp-validation-for="Platform" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProgressPercentage" class="form-label"></label>
+        <input asp-for="ProgressPercentage" class="form-control" />
+        <span asp-validation-for="ProgressPercentage" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="HoursSpent" class="form-label"></label>
+        <input asp-for="HoursSpent" class="form-control" />
+        <span asp-validation-for="HoursSpent" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

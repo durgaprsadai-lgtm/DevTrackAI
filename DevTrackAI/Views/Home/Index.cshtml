@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row">
+
+    <div class="col-md-4">
+
+        <div class="card shadow border-0 bg-primary text-white mb-4">
+            <div class="card-body text-center">
+
+                <h1>@ViewBag.TotalCourses</h1>
+
+                <h5>Total Courses</h5>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow border-0 bg-success text-white mb-4">
+            <div class="card-body text-center">
+
+                <h1>@ViewBag.TotalHours</h1>
+
+                <h5>Total Learning Hours</h5>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow border-0 bg-warning text-dark mb-4">
+            <div class="card-body text-center">
+
+                <h1>@Math.Round((double)ViewBag.AverageProgress)%</h1>
+
+                <h5>Average Progress</h5>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-header bg-primary text-white">
+
+        Developer Growth Dashboard 🚀
+
+    </div>
+
+    <div class="card-body">
+
+        <h4>Welcome to DevTrackAI</h4>
+
+        <p>
+            Track your learning progress,
+            certifications, interview preparation,
+            and career growth.
+        </p>
+
+    </div>
+
+</div>
