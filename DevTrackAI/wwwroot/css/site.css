@@ -1,31 +1,57 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
+html,
+body {
   min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+  margin: 0;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.content-wrapper {
+  min-height: calc(100vh - 7rem);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.content .card {
+  margin-bottom: 1rem;
+}
+
+.chart-container {
+  position: relative;
+  height: 320px;
+}
+
+.small-box.bg-warning,
+.small-box.bg-warning .small-box-footer {
+  color: #212529;
+}
+
+/* Preserve the form-control appearance used by the existing tracker forms. */
+.form-select {
+  display: block;
+  width: 100%;
+  height: calc(2.25rem + 2px);
+  padding: 0.375rem 0.75rem;
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.dark-mode .content-wrapper {
+  background-color: #343a40;
+}
+
+.dark-mode .content-wrapper .card {
+  color: #f8f9fa;
+  background-color: #343a40;
+}
+
+.dark-mode .content-wrapper .card-header,
+.dark-mode .content-wrapper .table td,
+.dark-mode .content-wrapper .table th {
+  border-color: #4b545c;
+}
+
+.dark-mode .content-wrapper .table {
+  color: #f8f9fa;
 }

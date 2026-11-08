@@ -8,10 +8,10 @@ namespace DevTrackAI.Models
 
         [Required]
         [StringLength(100)]
-        public string CourseName { get; set; }
+        public string CourseName { get; set; } = string.Empty;
 
         [Required]
-        public string Platform { get; set; }
+        public string Platform { get; set; } = string.Empty;
 
         [Range(0, 100)]
         public int ProgressPercentage { get; set; }

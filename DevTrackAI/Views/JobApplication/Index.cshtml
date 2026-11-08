@@ -1,0 +1,116 @@
+﻿@model IEnumerable<DevTrackAI.Models.JobApplication>
+
+@{
+    ViewData["Title"] = "Job Tracker";
+}
+
+<div class="card shadow">
+
+    <div class="card-header bg-success text-white d-flex justify-content-between">
+
+        <h3>Job Application Tracker</h3>
+
+        <a asp-action="Create"
+           class="btn btn-light">
+            Add Job
+        </a>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+
+                <tr>
+                    <th>Company</th>
+                    <th>Position</th>
+                    <th>Status</th>
+                    <th>Applied Date</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if(Model.Any())
+                {
+                    @foreach(var item in Model)
+                    {
+                        <tr>
+
+                            <td>@item.CompanyName</td>
+
+                            <td>@item.Position</td>
+
+                            <td>
+
+                                @if(item.Status == "Applied")
+                                {
+                                    <span class="badge bg-primary">
+                                        Applied
+                                    </span>
+                                }
+                                else if(item.Status == "Interview Scheduled")
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Interview
+                                    </span>
+                                }
+                                else if(item.Status == "Selected")
+                                {
+                                    <span class="badge bg-success">
+                                        Selected
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        Rejected
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+                                @item.AppliedDate.ToShortDateString()
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-warning btn-sm">
+                                    Edit
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger btn-sm">
+                                    Delete
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5"
+                            class="text-center">
+                            No Job Applications Found
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

@@ -1,4 +1,6 @@
 using DevTrackAI.Data;
+using DevTrackAI.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevTrackAI.Controllers
@@ -14,17 +16,36 @@ namespace DevTrackAI.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.TotalCourses = _context.Learnings.Count();
+            var jobStatuses = _context.JobApplications
+                .AsNoTracking()
+                .Select(job => job.Status)
+                .ToList();
 
-            ViewBag.TotalHours =
-                _context.Learnings.Sum(x => x.HoursSpent);
+            var model = new DashboardViewModel
+            {
+                TotalCourses = _context.Learnings.Count(),
+                TotalLearningHours = _context.Learnings
+                    .Sum(learning => (int?)learning.HoursSpent) ?? 0,
+                AverageProgress = _context.Learnings
+                    .Average(learning => (double?)learning.ProgressPercentage) ?? 0,
+                TotalJobs = jobStatuses.Count,
+                TotalCertifications = _context.Certifications.Count(),
+                AppliedJobs = jobStatuses.Count(status => HasStatus(status, "Applied")),
+                InterviewingJobs = jobStatuses.Count(status =>
+                    HasStatus(status, "Interviewing") || HasStatus(status, "Interview Scheduled")),
+                SelectedJobs = jobStatuses.Count(status => HasStatus(status, "Selected")),
+                RejectedJobs = jobStatuses.Count(status => HasStatus(status, "Rejected"))
+            };
 
-            ViewBag.AverageProgress =
-                _context.Learnings.Any()
-                ? _context.Learnings.Average(x => x.ProgressPercentage)
-                : 0;
+            return View(model);
+        }
 
-            return View();
+        private static bool HasStatus(string? status, string expectedStatus)
+        {
+            return string.Equals(
+                status?.Trim(),
+                expectedStatus,
+                StringComparison.OrdinalIgnoreCase);
         }
     }
 }

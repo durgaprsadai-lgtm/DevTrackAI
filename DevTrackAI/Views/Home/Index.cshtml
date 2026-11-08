@@ -1,71 +1,124 @@
-﻿@{
+@using System.Text.Json
+@model DevTrackAI.Models.DashboardViewModel
+
+@{
     ViewData["Title"] = "Dashboard";
+    var trackerCounts = new[]
+    {
+        Model.TotalCourses,
+        Model.TotalJobs,
+        Model.TotalCertifications
+    };
 }
 
 <div class="row">
-
-    <div class="col-md-4">
-
-        <div class="card shadow border-0 bg-primary text-white mb-4">
-            <div class="card-body text-center">
-
-                <h1>@ViewBag.TotalCourses</h1>
-
-                <h5>Total Courses</h5>
-
-            </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="small-box bg-primary">
+            <div class="inner"><h3>@Model.TotalCourses</h3><p>Total Courses</p></div>
+            <div class="icon"><i class="fas fa-book" aria-hidden="true"></i></div>
+            <a asp-controller="Learning" asp-action="Index" class="small-box-footer">View learning <i class="fas fa-arrow-circle-right"></i></a>
         </div>
-
     </div>
-
-    <div class="col-md-4">
-
-        <div class="card shadow border-0 bg-success text-white mb-4">
-            <div class="card-body text-center">
-
-                <h1>@ViewBag.TotalHours</h1>
-
-                <h5>Total Learning Hours</h5>
-
-            </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="small-box bg-info">
+            <div class="inner"><h3>@Model.TotalLearningHours</h3><p>Learning Hours</p></div>
+            <div class="icon"><i class="fas fa-clock" aria-hidden="true"></i></div>
+            <span class="small-box-footer">Across all courses</span>
         </div>
-
     </div>
-
-    <div class="col-md-4">
-
-        <div class="card shadow border-0 bg-warning text-dark mb-4">
-            <div class="card-body text-center">
-
-                <h1>@Math.Round((double)ViewBag.AverageProgress)%</h1>
-
-                <h5>Average Progress</h5>
-
-            </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="small-box bg-success">
+            <div class="inner"><h3>@Model.TotalCertifications</h3><p>Certifications</p></div>
+            <div class="icon"><i class="fas fa-certificate" aria-hidden="true"></i></div>
+            <a asp-controller="Certification" asp-action="Index" class="small-box-footer">View certifications <i class="fas fa-arrow-circle-right"></i></a>
         </div>
-
     </div>
-
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="small-box bg-warning">
+            <div class="inner"><h3>@Math.Round(Model.AverageProgress)%</h3><p>Average Progress</p></div>
+            <div class="icon"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
+            <span class="small-box-footer">Course completion</span>
+        </div>
+    </div>
 </div>
 
-<div class="card shadow">
-
-    <div class="card-header bg-primary text-white">
-
-        Developer Growth Dashboard 🚀
-
+<div class="row">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="small-box bg-primary">
+            <div class="inner"><h3>@Model.AppliedJobs</h3><p>Applied</p></div>
+            <div class="icon"><i class="fas fa-paper-plane" aria-hidden="true"></i></div>
+        </div>
     </div>
-
-    <div class="card-body">
-
-        <h4>Welcome to DevTrackAI</h4>
-
-        <p>
-            Track your learning progress,
-            certifications, interview preparation,
-            and career growth.
-        </p>
-
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="small-box bg-warning">
+            <div class="inner"><h3>@Model.InterviewingJobs</h3><p>Interviewing</p></div>
+            <div class="icon"><i class="fas fa-comments" aria-hidden="true"></i></div>
+        </div>
     </div>
-
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="small-box bg-success">
+            <div class="inner"><h3>@Model.SelectedJobs</h3><p>Selected</p></div>
+            <div class="icon"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="small-box bg-danger">
+            <div class="inner"><h3>@Model.RejectedJobs</h3><p>Rejected</p></div>
+            <div class="icon"><i class="fas fa-times-circle" aria-hidden="true"></i></div>
+        </div>
+    </div>
 </div>
+
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Learning Analytics</h3></div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="learningChart" role="img" aria-label="Counts of courses, job applications, and certifications"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Welcome to DevTrackAI</h3></div>
+            <div class="card-body">
+                <p>Track learning progress, certifications, interview preparation, and career growth in one place.</p>
+                <a asp-controller="JobApplication" asp-action="Index" class="btn btn-primary">View job tracker</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const canvas = document.getElementById("learningChart");
+            const counts = @Html.Raw(JsonSerializer.Serialize(trackerCounts));
+
+            if (!canvas || typeof Chart === "undefined") {
+                return;
+            }
+
+            new Chart(canvas, {
+                type: "bar",
+                data: {
+                    labels: ["Courses", "Job Applications", "Certifications"],
+                    datasets: [{
+                        label: "Total",
+                        data: counts,
+                        backgroundColor: ["#007bff", "#28a745", "#ffc107"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
+                    }
+                }
+            });
+        })();
+    </script>
+}

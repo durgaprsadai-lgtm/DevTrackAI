@@ -1,0 +1,86 @@
+﻿@model IEnumerable<DevTrackAI.Models.Certification>
+
+<div class="card shadow">
+
+    <div class="card-header bg-info text-white d-flex justify-content-between">
+
+        <h3>Certification Tracker</h3>
+
+        <a asp-action="Create"
+           class="btn btn-light">
+            Add Certification
+        </a>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <thead class="table-dark">
+
+                <tr>
+                    <th>Name</th>
+                    <th>Provider</th>
+                    <th>Exam Countdown</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach(var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.CertificationName</td>
+
+                        <td>@item.Provider</td>
+
+                        <td>
+                            <div>@item.ExamDate.ToShortDateString()</div>
+                            @if (item.DaysRemaining < 0)
+                            {
+                                <span class="badge badge-secondary">Exam date passed</span>
+                            }
+                            else if (item.DaysRemaining == 0)
+                            {
+                                <span class="badge badge-warning">Due today</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-info">
+                                    @item.DaysRemaining @(item.DaysRemaining == 1 ? "day" : "days") remaining
+                                </span>
+                            }
+                        </td>
+
+                        <td>
+
+                            <div class="progress">
+
+                                <div class="progress-bar bg-success"
+                                     style="width:@(item.ProgressPercentage)%">
+
+                                    @item.ProgressPercentage%
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>@item.Status</td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

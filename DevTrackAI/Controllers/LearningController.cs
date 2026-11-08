@@ -39,16 +39,21 @@ namespace DevTrackAI.Controllers
             return View(learning);
         }
 
+        // EDIT GET
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var course = _context.Learnings.Find(id);
 
             if (course == null)
+            {
                 return NotFound();
+            }
 
             return View(course);
         }
 
+        // EDIT POST
         [HttpPost]
         public IActionResult Edit(Learning learning)
         {
@@ -61,19 +66,6 @@ namespace DevTrackAI.Controllers
             }
 
             return View(learning);
-        }
-
-        public IActionResult Delete(int id)
-        {
-            var course = _context.Learnings.Find(id);
-
-            if (course != null)
-            {
-                _context.Learnings.Remove(course);
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction(nameof(Index));
         }
     }
 }
